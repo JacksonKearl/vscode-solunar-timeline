@@ -1,0 +1,60 @@
+{
+  "name": "solunar-timeline",
+  "displayName": "SoLunar Timeline",
+  "description": "SoLunar calendar in the Timeline pane",
+  "version": "0.0.1",
+  "enableProposedApi": true,
+  "engines": {
+    "vscode": "^1.43.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "solunar-timeline.log",
+        "title": "Log",
+        "icon": "$(zap)"
+      }
+    ],
+    "menus": {
+      "timeline/item/context": [
+        {
+          "command": "solunar-timeline.log",
+          "group": "inline",
+          "when": "timelineItem == new-moon"
+        },
+        {
+          "command": "solunar-timeline.log",
+          "when": "timelineItem == full-moon"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.43.0",
+    "glob": "^7.1.5",
+    "mocha": "^6.2.2",
+    "typescript": "^3.6.4",
+    "vscode-test": "^1.2.2",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0"
+  },
+  "dependencies": {}
+}
