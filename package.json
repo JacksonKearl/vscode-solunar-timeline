@@ -3,6 +3,7 @@
   "displayName": "SoLunar Timeline",
   "description": "SoLunar calendar in the Timeline pane",
   "version": "0.0.1",
+  "publisher": "jakearl",
   "enableProposedApi": true,
   "engines": {
     "vscode": "^1.43.0"
@@ -14,28 +15,6 @@
     "*"
   ],
   "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "solunar-timeline.log",
-        "title": "Log",
-        "icon": "$(zap)"
-      }
-    ],
-    "menus": {
-      "timeline/item/context": [
-        {
-          "command": "solunar-timeline.log",
-          "group": "inline",
-          "when": "timelineItem == new-moon"
-        },
-        {
-          "command": "solunar-timeline.log",
-          "when": "timelineItem == full-moon"
-        }
-      ]
-    }
-  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",

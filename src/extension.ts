@@ -61,7 +61,7 @@ class TodayTimeline implements vscode.TimelineProvider, vscode.Disposable {
 	private intervalHandle: NodeJS.Timeout;
 	constructor() {
 		this.intervalHandle = setInterval(() => {
-			this._onDidChange.fire({ reset: true })
+			this._onDidChange.fire()
 		}, 10000)
 	}
 
@@ -95,8 +95,8 @@ class LunarTimeline implements vscode.TimelineProvider {
 
 		if (typeof limit === 'number') {
 			if (cursorTimestamp === undefined) {
-				events.push(...this.getLunarEvents(4, cursorTimestamp ?? Date.now(), 'future').reverse())
-				events.push(...this.getLunarEvents(limit - 4, cursorTimestamp ?? Date.now(), 'past'))
+				events.push(...this.getLunarEvents(4, Date.now(), 'future').reverse())
+				events.push(...this.getLunarEvents(limit - 4, Date.now(), 'past'))
 			} else {
 				events.push(...this.getLunarEvents(limit, cursorTimestamp, 'past'))
 			}
@@ -115,10 +115,6 @@ class LunarTimeline implements vscode.TimelineProvider {
 				description: new Date(event.timestamp).toDateString().replace(/\d{4}$/, ''),
 				iconPath: vscode.Uri.joinPath(this.extUri, 'media', phaseToIcon(event.phase)),
 				contextValue: phaseToLabel(event.phase).toLowerCase().replace(/\s/g, '-'),
-				command: {
-					command: 'solunar-timeline.log',
-					title: 'Unused'
-				}
 			}))
 		}
 	}
