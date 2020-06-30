@@ -27,17 +27,13 @@ const julianToTimestamp = (julian: number) => (julian - epochAsJulian) * msInDay
 
 enum Phase {
 	New,
-	FirstQuarter,
 	Full,
-	ThirdQuarter
 }
 
 const phaseToLabel = (phase: Phase) => {
 	switch (phase) {
 		case Phase.New: return 'New Moon'
 		case Phase.Full: return 'Full Moon'
-		case Phase.ThirdQuarter: return 'Third Quarter'
-		case Phase.FirstQuarter: return 'First Quarter'
 		default: throw Error('unexpected phase')
 	}
 }
@@ -46,8 +42,6 @@ const phaseToIcon = (phase: Phase) => {
 	switch (phase) {
 		case Phase.New: return 'New.svg'
 		case Phase.Full: return 'Full.svg'
-		case Phase.ThirdQuarter: return 'Third.svg'
-		case Phase.FirstQuarter: return 'First.svg'
 		default: throw Error('unexpected phase')
 	}
 }
@@ -95,8 +89,8 @@ class LunarTimeline implements vscode.TimelineProvider {
 
 		if (typeof limit === 'number') {
 			if (cursorTimestamp === undefined) {
-				events.push(...this.getLunarEvents(4, Date.now(), 'future').reverse())
-				events.push(...this.getLunarEvents(limit - 4, Date.now(), 'past'))
+				events.push(...this.getLunarEvents(2, Date.now(), 'future').reverse())
+				events.push(...this.getLunarEvents(limit - 2, Date.now(), 'past'))
 			} else {
 				events.push(...this.getLunarEvents(limit, cursorTimestamp, 'past'))
 			}
@@ -120,15 +114,19 @@ class LunarTimeline implements vscode.TimelineProvider {
 	}
 
 	private getLunarEvents(limit: number, start: number, direction: 'future' | 'past'): { phase: Phase, timestamp: number }[] {
-		let nearestImportant = (direction === 'future' ? Math.ceil : Math.floor)(this.timestampToPhase(start) * 4) / 4
+		let nearestImportant = (direction === 'future' ? Math.ceil : Math.floor)(this.timestampToPhase(start) * 2) / 2
 
 		if (nearestImportant === this.timestampToPhase(start)) {
-			direction === 'future' ? nearestImportant += 0.25 : nearestImportant -= 0.25
+			if (direction === 'future') {
+				nearestImportant += 0.5
+			} else {
+				nearestImportant -= 0.5
+			}
 		}
 
 		return Array.from({ length: limit }).map((_, i) => {
-			const eventPhase = nearestImportant + (direction === 'future' ? 1 : -1) * 0.25 * i
-			const phaseType = Math.round((eventPhase - Math.floor(eventPhase)) * 4)
+			const eventPhase = nearestImportant + (direction === 'future' ? 1 : -1) * 0.5 * i
+			const phaseType = Math.round((eventPhase - Math.floor(eventPhase)) * 2)
 			return { phase: phaseType, timestamp: this.phaseToTimestamp(eventPhase) }
 		})
 	}
