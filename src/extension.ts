@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const extUri = context.extensionUri
 	context.subscriptions.push(vscode.workspace.registerTimelineProvider('*', new LunarTimeline(extUri)))
-	context.subscriptions.push(vscode.workspace.registerTimelineProvider('*', new TodayTimeline()))
+	context.subscriptions.push(vscode.workspace.registerTimelineProvider('*', new TodayTimeline(extUri)))
 
 	context.subscriptions.push(vscode.commands.registerCommand('solunar-timeline.log', (...args) => {
 		console.log(args)
@@ -53,7 +53,7 @@ class TodayTimeline implements vscode.TimelineProvider, vscode.Disposable {
 	label = 'Today'
 
 	private intervalHandle: NodeJS.Timeout;
-	constructor() {
+	constructor(private extUri: vscode.Uri) {
 		this.intervalHandle = setInterval(() => {
 			this._onDidChange.fire()
 		}, 10000)
@@ -64,7 +64,14 @@ class TodayTimeline implements vscode.TimelineProvider, vscode.Disposable {
 	}
 
 	provideTimeline(): vscode.ProviderResult<vscode.Timeline> {
-		return { items: [{ timestamp: Date.now(), label: 'Today' }] }
+		return {
+			items: [{
+				timestamp: Date.now() + 10000,
+				label: '',
+				description: 'Today',
+				iconPath: vscode.Uri.joinPath(this.extUri, 'media', 'Empty.svg')
+			}],
+		}
 	}
 }
 
