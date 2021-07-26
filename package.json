@@ -6,7 +6,7 @@
   "publisher": "jakearl",
   "enableProposedApi": true,
   "engines": {
-    "vscode": "^1.43.0"
+    "vscode": "^1.58.0"
   },
   "categories": [
     "Other"
@@ -14,6 +14,16 @@
   "activationEvents": [
     "*"
   ],
+  "contributes": {
+    "configuration": {
+      "properties": {
+        "solunar-timeline.station": {
+          "type": "string",
+          "description": "NOAA station id for tidal calendar's data. Find on https://tidesandcurrents.noaa.gov/"
+        }
+      }
+    }
+  },
   "main": "./out/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -23,17 +33,20 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/glob": "^7.1.1",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.11.7",
-    "@types/vscode": "^1.43.0",
+    "@types/vscode": "^1.58.0",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0",
     "glob": "^7.1.5",
     "mocha": "^6.2.2",
     "typescript": "^3.6.4",
-    "vscode-test": "^1.2.2",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
-    "eslint": "^6.8.0"
+    "vscode-test": "^1.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
 }
