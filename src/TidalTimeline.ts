@@ -18,7 +18,6 @@ export const fetchData = async (station: string): Promise<Predictions> => {
 	const end_date = dateToNOAATimestamp(new Date(today + day))
 	const query = `https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&application=NOS.COOPS.TAC.WL&begin_date=${begin_date}&end_date=${end_date}&datum=MLLW&station=${station}&time_zone=GMT&units=english&interval=hilo&format=json`
 	if (cache[query]) { return cache[query] }
-	console.log({ query })
 	const resp = await axios.get<NOAAPredictions>(query)
 	if (resp.status > 400) {
 		throw Error(JSON.stringify(resp.data))
@@ -42,11 +41,10 @@ export class TidalTimeline implements vscode.TimelineProvider, vscode.Disposable
 		this.disposables.push(vscode.workspace.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration('solunar-timeline.station')) {
 				this.station = vscode.workspace.getConfiguration('solunar-timeline').get('station', '')
-				this._onDidChange.fire()
+				this._onDidChange.fire({ reset: true, uri: extUri })
 			}
 		}))
 	}
-
 	dispose() {
 	}
 
@@ -69,10 +67,6 @@ export class TidalTimeline implements vscode.TimelineProvider, vscode.Disposable
 				description: tide.toFixed(1) + '\''
 			}))
 			.filter(({ timestamp }) => timestamp > start && timestamp < end)
-
-		console.log(items.map(({ timestamp, description, label }) => ({
-			description, label, timestamp: new Date(timestamp).toLocaleString()
-		})))
 
 		return { items }
 	}

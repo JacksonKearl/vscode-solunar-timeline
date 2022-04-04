@@ -67,7 +67,7 @@ export class LunarTimeline implements vscode.TimelineProvider {
 			},
 			items: events.map(event => ({
 				timestamp: event.timestamp,
-				detail: phaseToLabel(event.phase),
+				tooltip: new vscode.MarkdownString('## ' + phaseToLabel(event.phase)),
 				label: '',
 				description: new Date(event.timestamp).toDateString().replace(/\d{4}$/, ''),
 				iconPath: vscode.Uri.joinPath(this.extUri, 'media', phaseToIcon(event.phase)),
