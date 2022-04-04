@@ -4,7 +4,9 @@
   "description": "SoLunar calendar in the Timeline pane",
   "version": "0.0.1",
   "publisher": "jakearl",
-  "enableProposedApi": true,
+  "enabledApiProposals": [
+    "timeline"
+  ],
   "engines": {
     "vscode": "^1.58.0"
   },
